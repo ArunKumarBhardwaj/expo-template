@@ -12,25 +12,11 @@ SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 
-function RootLayoutNav() {
+export default function RootLayout() {
   const { isAuthenticated } = useAuth();
   const segments = useSegments();
   const router = useRouter();
 
-  useEffect(() => {
-    const inAuthGroup = segments[0] === "(protected)";
-
-    if (!isAuthenticated && inAuthGroup) {
-      router.replace("/login");
-    } else if (isAuthenticated && !inAuthGroup) {
-      router.replace("/(protected)/");
-    }
-  }, [isAuthenticated, segments]);
-
-  return <Slot />;
-}
-
-export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
@@ -46,13 +32,28 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
+  useEffect(() => {
+    if (!loaded) return; // Wait for fonts to load
+
+    const inProtectedGroup = segments[0] === "(protected)";
+    const inAuthGroup = segments[0] === "(auth)";
+
+    if (!isAuthenticated && inProtectedGroup) {
+      // Redirect to sign-in if trying to access protected routes while not authenticated
+      router.replace("/(auth)/sign-in");
+    } else if (isAuthenticated && inAuthGroup) {
+      // Redirect to protected area if authenticated user is in auth routes
+      router.replace("/(protected)/");
+    }
+  }, [isAuthenticated, segments, loaded, router]);
+
   if (!loaded) {
     return null;
   }
 
   return (
     <QueryClientProvider client={queryClient}>
-      <RootLayoutNav />
+      <Slot />
     </QueryClientProvider>
   );
 }

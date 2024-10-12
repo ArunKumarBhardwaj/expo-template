@@ -1,4 +1,4 @@
-import { useLoginMutation } from "@/api/authApi";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import {
   View,
@@ -7,22 +7,29 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 
-const LoginPage = () => {
+const SignUp = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const loginMutation: any = useLoginMutation();
-  const handleLogin = async () => {
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSignUp = async () => {
+    if (password !== confirmPassword) {
+      Alert.alert("Passwords don't match!");
+      return;
+    }
     try {
-      await loginMutation.mutateAsync({ username, password });
+      // Redirect to protected route or show success message
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error("Signup failed:", error);
     }
   };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome Back!</Text>
+      <Text style={styles.title}>Create Account</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -38,20 +45,22 @@ const LoginPage = () => {
         onChangeText={setPassword}
         secureTextEntry
       />
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+      />
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+        <Text style={styles.buttonText}>Sign Up</Text>
+      </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
-        onPress={handleLogin}
-        disabled={loginMutation.isPending}
+        onPress={() => router.push("/(auth)/sign-in")}
       >
-        {loginMutation.isPending ? (
-          <ActivityIndicator color="#ffffff" />
-        ) : (
-          <Text style={styles.buttonText}>Login</Text>
-        )}
+        <Text style={styles.buttonText}>Go to Login page</Text>
       </TouchableOpacity>
-      {loginMutation.isError && (
-        <Text style={styles.errorText}>Login failed. Please try again.</Text>
-      )}
     </View>
   );
 };
@@ -86,6 +95,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 10,
   },
   buttonText: {
     color: "#ffffff",
@@ -97,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginPage;
+export default SignUp;

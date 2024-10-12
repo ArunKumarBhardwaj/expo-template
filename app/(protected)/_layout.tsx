@@ -1,14 +1,28 @@
 import React from "react";
-import { Redirect, SplashScreen, Stack } from "expo-router";
-import { useAuth } from "@/store/authStore";
-
-SplashScreen.preventAutoHideAsync();
+import { Tabs } from "expo-router";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function ProtectedLayout() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" />
-      {/* Add other protected screens here */}
-    </Stack>
+    <Tabs screenOptions={{ tabBarActiveTintColor: "blue" }}>
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: "Home",
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={28} name="home" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={28} name="cog" color={color} />
+          ),
+        }}
+      />
+    </Tabs>
   );
 }

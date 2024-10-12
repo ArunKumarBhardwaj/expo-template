@@ -1,12 +1,12 @@
 import { View, Text } from "react-native";
 import React from "react";
 
-const AuthIndex = () => {
+const Settings = () => {
   return (
     <View>
-      <Text>AuthIndex</Text>
+      <Text>Settings</Text>
     </View>
   );
 };
 
-export default AuthIndex;
+export default Settings;

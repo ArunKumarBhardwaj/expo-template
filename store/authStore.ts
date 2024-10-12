@@ -6,7 +6,6 @@ interface AuthState {
   refreshToken: string | null;
   isAuthenticated: boolean;
   setAuth: (token: string, refreshToken: string) => void;
-  clearAuth: () => void;
   logout: () => void;
   getToken: () => string | null;
   getRefreshToken: () => string | null;
@@ -20,10 +19,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     MMKVStorage.setItem("token", token);
     MMKVStorage.setItem("refreshToken", refreshToken);
     set({ token, refreshToken, isAuthenticated: true });
-  },
-  clearAuth: () => {
-    MMKVStorage.clear();
-    set({ token: null, refreshToken: null, isAuthenticated: false });
   },
   logout: () => {
     MMKVStorage.clear();
