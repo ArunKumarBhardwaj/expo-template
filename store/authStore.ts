@@ -7,11 +7,9 @@ interface AuthState {
   isAuthenticated: boolean;
   setAuth: (token: string, refreshToken: string) => void;
   logout: () => void;
-  getToken: () => string | null;
-  getRefreshToken: () => string | null;
 }
 
-export const useAuthStore = create<AuthState>((set, get) => ({
+export const useAuthStore = create<AuthState>((set) => ({
   token: MMKVStorage.getItem("token"),
   refreshToken: MMKVStorage.getItem("refreshToken"),
   isAuthenticated: !!MMKVStorage.getItem("token"),
@@ -24,8 +22,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     MMKVStorage.clear();
     set({ token: null, refreshToken: null, isAuthenticated: false });
   },
-  getToken: () => MMKVStorage.getItem("token"),
-  getRefreshToken: () => MMKVStorage.getItem("refreshToken"),
 }));
 
 export const useAuth = () => useAuthStore();

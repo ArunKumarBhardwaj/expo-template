@@ -23,7 +23,7 @@ const refreshToken = async (): Promise<string> => {
     );
     const { accessToken: newAccessToken } = response?.data?.data;
     MMKVStorage.setItem("token", newAccessToken);
-    MMKVStorage.setItem("refreshToken", "");
+    MMKVStorage.removeItem("refreshToken"); // Remove the refresh token
     return newAccessToken;
   } catch (error) {
     throw error;

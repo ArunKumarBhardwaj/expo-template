@@ -37,7 +37,6 @@ export default function RootLayout() {
 
     const inProtectedGroup = segments[0] === "(protected)";
     const inAuthGroup = segments[0] === "(auth)";
-
     if (!isAuthenticated && inProtectedGroup) {
       // Redirect to sign-in if trying to access protected routes while not authenticated
       router.replace("/(auth)/sign-in");
